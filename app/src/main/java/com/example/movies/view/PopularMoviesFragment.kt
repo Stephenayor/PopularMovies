@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.movies.R
@@ -16,18 +17,17 @@ import com.example.movies.adapter.PopularMoviesAdapter
 import com.example.movies.databinding.FragmentPopularMoviesBinding
 import com.example.movies.model.MovieResult
 import com.example.movies.model.PopularMovies
-import com.example.movies.network.MoviesRetrofitClientInstance
-import com.example.movies.network.PopularMoviesApi
 import com.example.movies.viewmodel.MoviesViewModel
 import com.example.movies.viewmodel.MoviesViewModelFactory
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
 
 
-class PopularMoviesFragment : Fragment() {
+class PopularMoviesFragment : Fragment(), PopularMoviesAdapter.MovieClickInterface {
     lateinit var binding: FragmentPopularMoviesBinding
     private lateinit var moviesViewModel: MoviesViewModel
+    lateinit var navController: NavController
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,17 +36,21 @@ class PopularMoviesFragment : Fragment() {
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?): View? {
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate<FragmentPopularMoviesBinding>(
                 inflater, R.layout.fragment_popular_movies, container,
-                false)
+                false
+        )
 
         setUpViewModel()
-        moviesViewModel.getPopularMovies()?.observe(viewLifecycleOwner, Observer { list ->
-            list?.let {
-                generatePopularMoviesList(list.results)
-            }
-        })
+//        moviesViewModel.getPopularMovies()?.observe(viewLifecycleOwner, Observer { list ->
+//            list?.let {
+//                generatePopularMoviesList(list.results)
+//            }
+//        })
+        navController = this.findNavController()!!
+        getPopularMovies()
         return binding.root
     }
 
@@ -60,7 +64,7 @@ class PopularMoviesFragment : Fragment() {
     }
 
     private fun generatePopularMoviesList(movieResult: List<MovieResult>) {
-        val popularMoviesAdapter = PopularMoviesAdapter()
+        val popularMoviesAdapter = PopularMoviesAdapter(this)
         popularMoviesAdapter.movies = movieResult
         binding.popularMoviesRecyclerView.adapter = popularMoviesAdapter
         val layoutManager = GridLayoutManager(activity, 3)
@@ -69,6 +73,52 @@ class PopularMoviesFragment : Fragment() {
                 DividerItemDecoration(
                         context,
                         GridLayoutManager.HORIZONTAL
-                ))
+                )
+        )
     }
+
+    override fun onMovieClick(movies: MovieResult) {
+        val popularMoviesDetailFragment: Fragment = PopularMoviesDetailFragment()
+        val bundle = Bundle()
+        bundle.putParcelable("movies", movies)
+        popularMoviesDetailFragment.arguments = bundle
+        requireActivity().supportFragmentManager.beginTransaction().remove(PopularMoviesFragment())
+                .replace(R.id.popular_movies_fragment, popularMoviesDetailFragment)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit()
+
+    }
+
+    private fun getPopularMovies(){
+        moviesViewModel.getObservablePopularMovies()?.subscribe(
+                object : Observer<PopularMovies>{
+                    override fun onSubscribe(disposable: Disposable) {
+                        Toast.makeText(context, "SUBSCRIBED", Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onNext(movies: PopularMovies) {
+                        generatePopularMoviesList(movies.results)
+                    }
+
+                    override fun onError(e: Throwable) {
+                    }
+
+                    override fun onComplete() {
+                        Toast.makeText(context, "COMPLETED", Toast.LENGTH_LONG).show()
+                    }
+
+                })
+    }
+
 }
+
+
+
+
+
+
+
+
+
+

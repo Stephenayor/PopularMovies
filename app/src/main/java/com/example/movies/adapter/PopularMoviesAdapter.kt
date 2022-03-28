@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.movies.R
 import com.example.movies.model.MovieResult
 
-class PopularMoviesAdapter() : RecyclerView.Adapter<PopularMoviesAdapter.PopularMoviesViewHolder>() {
+class PopularMoviesAdapter(val movieClickInterface: MovieClickInterface) : RecyclerView.Adapter<PopularMoviesAdapter.PopularMoviesViewHolder>() {
     var movies: List<MovieResult> = listOf<MovieResult>()
     set(value) {
         field = value
@@ -26,7 +26,9 @@ class PopularMoviesAdapter() : RecyclerView.Adapter<PopularMoviesAdapter.Popular
                 .load("https://image.tmdb.org/t/p/w500/" +
                         movies[position].posterPath)
                 .into(holder.imageView)
-
+        holder.itemView.setOnClickListener {
+            movieClickInterface.onMovieClick(movies[position])
+        }
     }
 
     override fun getItemCount(): Int {
@@ -37,7 +39,12 @@ class PopularMoviesAdapter() : RecyclerView.Adapter<PopularMoviesAdapter.Popular
 
          val imageView = itemView.findViewById<ImageView>(R.id.popularMovies_image_view)
 
+    }
 
+    interface MovieClickInterface {
+        // creating a method for click action
+        // on recycler view item for updating it.
+        fun onMovieClick(movies: MovieResult)
     }
 
 }

@@ -1,5 +1,7 @@
 package com.example.movies.model
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class MovieResult (
@@ -17,4 +19,53 @@ data class MovieResult (
     @SerializedName("video"             ) var video            : Boolean?       = null,
     @SerializedName("vote_average"      ) var voteAverage      : Double?        = null,
     @SerializedName("vote_count"        ) var voteCount        : Int?           = null
-)
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
+        parcel.readString(),
+        TODO("genreIds"),
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readValue(Double::class.java.classLoader) as? Double,
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
+        parcel.readValue(Double::class.java.classLoader) as? Double,
+        parcel.readValue(Int::class.java.classLoader) as? Int
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeValue(adult)
+        parcel.writeString(backdropPath)
+        parcel.writeValue(id)
+        parcel.writeString(originalLanguage)
+        parcel.writeString(originalTitle)
+        parcel.writeString(overview)
+        parcel.writeValue(popularity)
+        parcel.writeString(posterPath)
+        parcel.writeString(releaseDate)
+        parcel.writeString(title)
+        parcel.writeValue(video)
+        parcel.writeValue(voteAverage)
+        parcel.writeValue(voteCount)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<MovieResult> {
+        override fun createFromParcel(parcel: Parcel): MovieResult {
+            return MovieResult(parcel)
+        }
+
+        override fun newArray(size: Int): Array<MovieResult?> {
+            return arrayOfNulls(size)
+        }
+    }
+
+}
