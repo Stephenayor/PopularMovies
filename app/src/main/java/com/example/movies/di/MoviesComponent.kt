@@ -6,11 +6,11 @@ import com.example.movies.viewmodel.MoviesViewModel
 import dagger.Component
 
 
-@Component (modules = [MoviesViewModelModule::class])
+@Component
 interface MoviesComponent  {
 
     fun getMoviesViewModel(): MoviesViewModel
-    fun getMoviesRepository(): MoviesRepository
+//    fun getMoviesRepository(): MoviesRepository
     fun inject(popularMoviesFragment: PopularMoviesFragment)
 
 }

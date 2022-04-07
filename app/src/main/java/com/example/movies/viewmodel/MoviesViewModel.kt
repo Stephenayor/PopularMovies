@@ -4,10 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.movies.DaggerMoviesComponent
+import com.example.movies.di.DaggerMoviesComponent
 import com.example.movies.model.PopularMovies
 import com.example.movies.repository.MoviesRepository
-import dagger.Provides
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -30,7 +29,6 @@ class MoviesViewModel @Inject constructor() : AndroidViewModel(Application()) {
     }
 
     fun getTopRatedMovies(): LiveData<PopularMovies?>? {
-        moviesRepository = moviesComponent.getMoviesRepository()
         if (mutableLiveData == null) {
             mutableLiveData = moviesRepository!!.getTopRatedMovies()
         }
@@ -38,7 +36,6 @@ class MoviesViewModel @Inject constructor() : AndroidViewModel(Application()) {
     }
 
     fun getObservablePopularMovies(): Observable<PopularMovies>? {
-        moviesRepository = moviesComponent.getMoviesRepository()
        return  moviesRepository?.getObservablePopularMovies()
     }
 
