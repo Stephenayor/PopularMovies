@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.movies.DaggerMoviesComponent
 import com.example.movies.R
 import com.example.movies.adapter.PopularMoviesAdapter
 import com.example.movies.adapter.TopRatedMoviesAdapter
@@ -19,9 +20,11 @@ import com.example.movies.model.MovieResult
 import com.example.movies.viewmodel.MoviesViewModel
 import com.example.movies.viewmodel.MoviesViewModelFactory
 import java.util.ArrayList
+import javax.inject.Inject
 
 class TopRatedMoviesFragment : Fragment() {
-    private lateinit var moviesViewModel: MoviesViewModel
+    @Inject
+    lateinit var moviesViewModel: MoviesViewModel
     lateinit var binding: FragmentTopRatedMoviesBinding
 
 
@@ -35,7 +38,9 @@ class TopRatedMoviesFragment : Fragment() {
         binding = DataBindingUtil.inflate<FragmentTopRatedMoviesBinding>(inflater,
                 R.layout.fragment_top_rated_movies, container, false)
 
-        setUpViewModel()
+
+        val moviesComponent = DaggerMoviesComponent.create()
+        moviesViewModel = moviesComponent.getMoviesViewModel()
         moviesViewModel.getTopRatedMovies()?.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
                 generatePopularMoviesList(list.results)

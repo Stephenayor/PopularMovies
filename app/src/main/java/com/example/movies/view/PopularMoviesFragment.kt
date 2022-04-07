@@ -1,6 +1,5 @@
 package com.example.movies.view
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +25,6 @@ import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class PopularMoviesFragment : Fragment(), PopularMoviesAdapter.MovieClickInterface {
-
     lateinit var binding: FragmentPopularMoviesBinding
     @Inject
     lateinit var moviesViewModel: MoviesViewModel
@@ -46,13 +44,6 @@ class PopularMoviesFragment : Fragment(), PopularMoviesAdapter.MovieClickInterfa
             false
         )
 
-
-//        setUpViewModel()
-//        moviesViewModel.getPopularMovies()?.observe(viewLifecycleOwner, Observer { list ->
-//            list?.let {
-//                generatePopularMoviesList(list.results)
-//            }
-//        })
         navController = this.findNavController()!!
         return binding.root
     }
@@ -60,11 +51,6 @@ class PopularMoviesFragment : Fragment(), PopularMoviesAdapter.MovieClickInterfa
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        moviesViewModel =
-//            ViewModelProvider(
-//                this, viewModelFactory
-//            ).get(MoviesViewModel::class.java)
-//        moviesViewModel = DaggerMoviesComponent.builder().application(Application()).build().getMoviesViewModel()
         val moviesComponent = DaggerMoviesComponent.create()
         moviesViewModel = moviesComponent.getMoviesViewModel()
         getPopularMovies()
@@ -72,7 +58,7 @@ class PopularMoviesFragment : Fragment(), PopularMoviesAdapter.MovieClickInterfa
 
     private fun setUpViewModel() {
         val application = requireNotNull(this.activity).application
-//        val viewModelFactory = MoviesViewModelFactory(application)
+        val viewModelFactory = MoviesViewModelFactory(application)
         moviesViewModel =
             ViewModelProvider(
                 this, viewModelFactory
@@ -126,10 +112,6 @@ class PopularMoviesFragment : Fragment(), PopularMoviesAdapter.MovieClickInterfa
 
             })
 
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
     }
 }
 
