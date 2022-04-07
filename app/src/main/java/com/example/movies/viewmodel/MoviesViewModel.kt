@@ -6,14 +6,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.movies.model.PopularMovies
 import com.example.movies.repository.MoviesRepository
+import dagger.Provides
 import io.reactivex.Observable
+import javax.inject.Inject
 
-class MoviesViewModel(application: Application) : AndroidViewModel(application) {
+class MoviesViewModel @Inject constructor( ) : AndroidViewModel(Application()) {
 
-    private var moviesRepository: MoviesRepository? = null
+//    private var moviesRepository: MoviesRepository? = null
+    @Inject
+    lateinit var moviesRepository: MoviesRepository
     private var mutableLiveData: MutableLiveData<PopularMovies?>? = null
 
-    fun PopularMoviesViewmodel() {
+   fun MoviesViewModel() {
     }
 
     fun getPopularMovies(): LiveData<PopularMovies?>? {

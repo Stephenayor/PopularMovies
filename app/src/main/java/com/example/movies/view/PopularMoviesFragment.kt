@@ -1,5 +1,6 @@
 package com.example.movies.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.movies.DaggerMoviesComponent
 import com.example.movies.R
 import com.example.movies.adapter.PopularMoviesAdapter
 import com.example.movies.databinding.FragmentPopularMoviesBinding
@@ -21,46 +23,60 @@ import com.example.movies.viewmodel.MoviesViewModel
 import com.example.movies.viewmodel.MoviesViewModelFactory
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
-
+import javax.inject.Inject
 
 class PopularMoviesFragment : Fragment(), PopularMoviesAdapter.MovieClickInterface {
-    lateinit var binding: FragmentPopularMoviesBinding
-    private lateinit var moviesViewModel: MoviesViewModel
-    lateinit var navController: NavController
 
+    lateinit var binding: FragmentPopularMoviesBinding
+    @Inject
+    lateinit var moviesViewModel: MoviesViewModel
+    lateinit var viewModelFactory: MoviesViewModelFactory
+    lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate<FragmentPopularMoviesBinding>(
-                inflater, R.layout.fragment_popular_movies, container,
-                false
+            inflater, R.layout.fragment_popular_movies, container,
+            false
         )
 
-        setUpViewModel()
+
+//        setUpViewModel()
 //        moviesViewModel.getPopularMovies()?.observe(viewLifecycleOwner, Observer { list ->
 //            list?.let {
 //                generatePopularMoviesList(list.results)
 //            }
 //        })
         navController = this.findNavController()!!
-        getPopularMovies()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+//        moviesViewModel =
+//            ViewModelProvider(
+//                this, viewModelFactory
+//            ).get(MoviesViewModel::class.java)
+//        moviesViewModel = DaggerMoviesComponent.builder().application(Application()).build().getMoviesViewModel()
+        val moviesComponent = DaggerMoviesComponent.create()
+        moviesViewModel = moviesComponent.getMoviesViewModel()
+        getPopularMovies()
     }
 
     private fun setUpViewModel() {
         val application = requireNotNull(this.activity).application
-        val viewModelFactory = MoviesViewModelFactory(application)
+//        val viewModelFactory = MoviesViewModelFactory(application)
         moviesViewModel =
-                ViewModelProvider(
-                        this, viewModelFactory
-                ).get(MoviesViewModel::class.java)
+            ViewModelProvider(
+                this, viewModelFactory
+            ).get(MoviesViewModel::class.java)
     }
 
     private fun generatePopularMoviesList(movieResult: List<MovieResult>) {
@@ -70,10 +86,10 @@ class PopularMoviesFragment : Fragment(), PopularMoviesAdapter.MovieClickInterfa
         val layoutManager = GridLayoutManager(activity, 3)
         binding.popularMoviesRecyclerView.layoutManager = layoutManager
         binding.popularMoviesRecyclerView.addItemDecoration(
-                DividerItemDecoration(
-                        context,
-                        GridLayoutManager.HORIZONTAL
-                )
+            DividerItemDecoration(
+                context,
+                GridLayoutManager.HORIZONTAL
+            )
         )
     }
 
@@ -83,34 +99,38 @@ class PopularMoviesFragment : Fragment(), PopularMoviesAdapter.MovieClickInterfa
         bundle.putParcelable("movies", movies)
         popularMoviesDetailFragment.arguments = bundle
         requireActivity().supportFragmentManager.beginTransaction().remove(PopularMoviesFragment())
-                .replace(R.id.popular_movies_fragment, popularMoviesDetailFragment)
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit()
+            .replace(R.id.popular_movies_fragment, popularMoviesDetailFragment)
+            .setReorderingAllowed(true)
+            .addToBackStack(null)
+            .commit()
 
     }
 
-    private fun getPopularMovies(){
+    private fun getPopularMovies() {
         moviesViewModel.getObservablePopularMovies()?.subscribe(
-                object : Observer<PopularMovies>{
-                    override fun onSubscribe(disposable: Disposable) {
-                        Toast.makeText(context, "SUBSCRIBED", Toast.LENGTH_LONG).show()
-                    }
+            object : Observer<PopularMovies> {
+                override fun onSubscribe(disposable: Disposable) {
+                    Toast.makeText(context, "SUBSCRIBED", Toast.LENGTH_LONG).show()
+                }
 
-                    override fun onNext(movies: PopularMovies) {
-                        generatePopularMoviesList(movies.results)
-                    }
+                override fun onNext(movies: PopularMovies) {
+                    generatePopularMoviesList(movies.results)
+                }
 
-                    override fun onError(e: Throwable) {
-                    }
+                override fun onError(e: Throwable) {
+                }
 
-                    override fun onComplete() {
-                        Toast.makeText(context, "COMPLETED", Toast.LENGTH_LONG).show()
-                    }
+                override fun onComplete() {
+                    Toast.makeText(context, "COMPLETE", Toast.LENGTH_LONG).show()
+                }
 
-                })
+            })
+
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+    }
 }
 
 

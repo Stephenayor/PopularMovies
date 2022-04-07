@@ -7,8 +7,14 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.movies.databinding.ActivityMainBinding
 import com.example.movies.view.PagerAdapter
+import com.example.movies.view.PopularMoviesFragment
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
     lateinit var binding: ActivityMainBinding
     lateinit var navHostFragment: NavHostFragment
 
@@ -19,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.movies_list_fragment)
         binding.pager.adapter = PagerAdapter(supportFragmentManager)
         binding.tabLayout.setupWithViewPager(binding.pager)
+
     }
 
 }

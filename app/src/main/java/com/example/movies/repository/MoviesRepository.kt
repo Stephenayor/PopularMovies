@@ -6,16 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import com.example.movies.model.PopularMovies
 import com.example.movies.network.MoviesRetrofitClientInstance
 import com.example.movies.network.PopularMoviesApi
-import com.example.movies.view.PopularMoviesFragment
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class MoviesRepository {
-    lateinit var popularMoviesFragment: PopularMoviesFragment
+class MoviesRepository @Inject constructor() {
+
     val mutableLiveData: MutableLiveData<PopularMovies?> = MutableLiveData<PopularMovies?>()
 
 //    fun getPopularMovies(): MutableLiveData<PopularMovies?>? {
