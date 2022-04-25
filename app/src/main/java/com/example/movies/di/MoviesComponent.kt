@@ -10,7 +10,6 @@ import dagger.Component
 interface MoviesComponent  {
 
     fun getMoviesViewModel(): MoviesViewModel
-//    fun getMoviesRepository(): MoviesRepository
     fun inject(popularMoviesFragment: PopularMoviesFragment)
 
 }

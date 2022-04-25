@@ -1,9 +1,9 @@
 package com.example.movies.repository
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.example.movies.model.PopularMovies
+import com.example.movies.model.TrailersResult
 import com.example.movies.network.MoviesRetrofitClientInstance
 import com.example.movies.network.PopularMoviesApi
 import io.reactivex.Observable
@@ -17,6 +17,7 @@ import javax.inject.Inject
 class MoviesRepository @Inject constructor() {
 
     val mutableLiveData: MutableLiveData<PopularMovies?> = MutableLiveData<PopularMovies?>()
+    val mutableLiveDataTrailer: MutableLiveData<TrailersResult?> = MutableLiveData<TrailersResult?>()
 
 //    fun getPopularMovies(): MutableLiveData<PopularMovies?>? {
 //        val mutableLiveData: MutableLiveData<PopularMovies?> = MutableLiveData<PopularMovies?>()
@@ -63,5 +64,22 @@ class MoviesRepository @Inject constructor() {
                 ?.subscribeOn(Schedulers.io())
               ?.observeOn(AndroidSchedulers.mainThread())
 
+    }
+
+    fun getTrailers(moviesID: Int): MutableLiveData<TrailersResult?> {
+        val moviesApiService: PopularMoviesApi = MoviesRetrofitClientInstance.getRetrofitInstance()
+                ?.create(PopularMoviesApi::class.java) !!
+        val call: Call<TrailersResult> = moviesApiService.getTrailers(moviesID)
+        call.enqueue(object : Callback<TrailersResult>{
+            override fun onResponse(call: Call<TrailersResult>, response: Response<TrailersResult>) {
+                Log.d("Success", "TRAILERS COMING IN")
+                mutableLiveDataTrailer.value = response.body()
+            }
+            override fun onFailure(call: Call<TrailersResult>, t: Throwable) {
+            }
+
+        })
+
+       return mutableLiveDataTrailer
     }
 }

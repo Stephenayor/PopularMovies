@@ -22,10 +22,11 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val navController = findNavController(R.id.movies_list_fragment)
-        binding.pager.adapter = PagerAdapter(supportFragmentManager)
-        binding.tabLayout.setupWithViewPager(binding.pager)
 
+//        binding.pager.adapter = PagerAdapter(supportFragmentManager)
+//        binding.tabLayout.setupWithViewPager(binding.pager)
+
+        val navController = findNavController(R.id.nav_host_fragment)
     }
 
 }
