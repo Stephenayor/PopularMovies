@@ -11,14 +11,14 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:id="@+id/popular_movies_fragment"
     tools:context=".view.PopularMoviesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/popular_movies_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="3"
         android:layout_marginTop="20dp"

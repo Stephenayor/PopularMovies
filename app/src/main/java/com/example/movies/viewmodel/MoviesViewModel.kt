@@ -11,15 +11,13 @@ import com.example.movies.model.TrailersResult
 import com.example.movies.repository.MoviesRepository
 import com.example.movies.view.PopularMoviesDetailFragmentArgs
 import io.reactivex.Observable
+import io.reactivex.Single
 import javax.inject.Inject
 
 class MoviesViewModel @Inject constructor() : BaseViewModel() {
-
     @Inject
     lateinit var moviesRepository: MoviesRepository
     var moviesComponent = DaggerMoviesComponent.create()!!
-    private var mutableLiveData: MutableLiveData<PopularMovies?>? = null
-    private var mutableLiveDataTrailersResult: MutableLiveData<TrailersResult?>? = null
 
     fun MoviesViewModel() {
     }
@@ -43,12 +41,8 @@ class MoviesViewModel @Inject constructor() : BaseViewModel() {
         return moviesRepository?.getObservablePopularMovies()
     }
 
-    fun getTrailers(popularMovies: PopularMoviesDetailFragmentArgs): MutableLiveData<TrailersResult?>? {
-//        return popularMovies.movies.id?.let { moviesRepository.getTrailers(it) }
-        mutableLiveDataTrailersResult = popularMovies.movies.id?.let {
-            moviesRepository.getTrailers(it)
-        }
-        return mutableLiveDataTrailersResult
+    fun getTrailers(popularMovies: PopularMoviesDetailFragmentArgs): Single<TrailersResult>? {
+        return popularMovies.movies.id?.let { moviesRepository.getTrailers(it) }
     }
 
 

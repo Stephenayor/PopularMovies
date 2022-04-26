@@ -7,8 +7,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 
-class MoviesViewModelFactory  (
-         val application: Application) : ViewModelProvider.Factory {
+class MoviesViewModelFactory(
+        val application: Application
+) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MoviesViewModel::class.java)) {

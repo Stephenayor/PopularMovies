@@ -1,8 +1,10 @@
 package com.example.movies.network
 
+import com.example.movies.base.BaseFragment
 import com.example.movies.model.PopularMovies
 import com.example.movies.model.TrailersResult
 import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -26,7 +28,7 @@ interface PopularMoviesApi {
     @GET("3/movie/{MOVIE_ID}/videos?api_key=e39dd47477f4bd2ccf8277df82b9f616&language=en-US")
     fun getTrailers(
             @Path("MOVIE_ID") moviesID: Int
-    ): Call<TrailersResult>
+    ): Single<TrailersResult>
 
 
 //    @GET("3/movie/popular?api_key=e39dd47477f4bd2ccf8277df82b9f616&language=en-US&page=1")

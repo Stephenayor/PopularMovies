@@ -11,15 +11,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.movies.R
-import com.example.movies.adapter.PopularMoviesAdapter
 import com.example.movies.adapter.TopRatedMoviesAdapter
-import com.example.movies.databinding.FragmentPopularMoviesBinding
 import com.example.movies.databinding.FragmentTopRatedMoviesBinding
 import com.example.movies.di.DaggerMoviesComponent
 import com.example.movies.model.MovieResult
 import com.example.movies.viewmodel.MoviesViewModel
 import com.example.movies.viewmodel.MoviesViewModelFactory
-import java.util.ArrayList
 import javax.inject.Inject
 
 class TopRatedMoviesFragment : Fragment() {

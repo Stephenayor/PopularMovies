@@ -17,34 +17,50 @@
     <ImageView
         android:id="@+id/popularMovies_backdrop_details_imageView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="256dp"
         app:layout_collapseMode="parallax"
         android:fitsSystemWindows="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="25dp"
+        android:scaleType="centerCrop"
         />
 
+        <ImageView
+            android:id="@+id/movie_poster"
+            android:layout_width="132dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="200dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf=
+                "@+id/popularMovies_backdrop_details_imageView"
+            />
+
         <TextView
-            android:id="@+id/popularmovies_title_details_textview"
+            android:id="@+id/popular_moviesDetails_title_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="true"
             android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/popularMovies_backdrop_details_imageView"
-            android:layout_marginLeft="70dp"
-            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf=
+                "@id/popularMovies_backdrop_details_imageView"
+            app:layout_constraintLeft_toRightOf="@id/movie_poster"
+            android:layout_marginStart="170dp"
+            android:layout_marginTop="25dp"
             />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/trailers_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="70dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/popularmovies_title_details_textview"
+            app:layout_constraintTop_toBottomOf="@id/movie_poster"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
